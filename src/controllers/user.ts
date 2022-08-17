@@ -61,7 +61,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     } catch (error: any) {
         res.status(404).json({
             ok: false,
-            message: 'User coult not be create',
+            message: 'User coult not be loggin',
             data: error.message
         })
     }
