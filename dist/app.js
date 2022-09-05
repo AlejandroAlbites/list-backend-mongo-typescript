@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 const server_1 = __importDefault(require("./src/models/server"));
 const db_1 = require("./src/db/db");
-//configurar variables de entornos
 dotenv_1.default.config();
 (0, db_1.connectDb)();
 const server = new server_1.default();
