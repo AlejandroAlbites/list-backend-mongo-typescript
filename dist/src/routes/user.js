@@ -7,6 +7,6 @@ const router = (0, express_1.Router)();
 router.route('/').post(user_1.registerUser);
 router.route('/login').post(user_1.loginUser);
 router.route('/').get(user_1.getUser);
-router.route('/:id').get(validateJWT_1.validateJWT, user_1.getUserById);
+router.route('/userId').get(validateJWT_1.validateJWT, user_1.getUserById);
 exports.default = router;
 //# sourceMappingURL=user.js.map

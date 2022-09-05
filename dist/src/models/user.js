@@ -14,6 +14,10 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         required: [true, "password is required"],
     },
+    avatar: {
+        type: String,
+        required: [true, "avatar is required"],
+    },
     note: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'Note' }]
 }, {
     timestamps: true

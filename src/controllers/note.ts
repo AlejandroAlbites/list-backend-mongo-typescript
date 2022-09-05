@@ -42,7 +42,8 @@ export const showNotesByUser = async (req: RequestWithUserId, res: Response): Pr
             throw new Error('Invalid user')
         }
 
-        const notes: NotesEntry[] = await Note.find({ user: userId });
+        const notes: NotesEntry[] = await Note.find({ userId: user._id });
+
 
         res.status(200).json({
             ok: true,

@@ -15,9 +15,17 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
         }
 
         const encryptPassword = await bcrypt.hash(password, 8)
-        const user: UserEntry = await User.create({ ...req.body, password: encryptPassword })
+        const newUser: UserEntry = await User.create({ ...req.body, password: encryptPassword })
 
-        const token = await JWTgenerator(user._id)
+        const token = await JWTgenerator(newUser._id)
+
+        const user = {
+            avatar: newUser.avatar,
+            name: newUser.name,
+            email: newUser.email,
+            note: newUser.note,
+            _id: newUser._id
+        }
 
         res.status(200).json({
             ok: true,
@@ -52,10 +60,17 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
         const token = await JWTgenerator(userDB._id)
 
+        const user = {
+            avatar: userDB.avatar,
+            name: userDB.name,
+            email: userDB.email,
+            note: userDB.note,
+            _id: userDB._id
+        }
         res.status(200).json({
             ok: true,
             message: 'User logged',
-            data: userDB,
+            data: user,
             token,
         })
     } catch (error: any) {
@@ -89,13 +104,11 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
 
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { id } = req.params
+     
         const { userId }: any = req
-        const user: UserEntry | null = await User.findById(id)
+        const user: UserEntry | null = await User.findById(userId)
             .select('-password')
-        if (!user || user._id.toString() !== userId) {
-            throw new Error('the user does not exist')
-        }
+     
         res.status(200).json({
             ok: true,
             message: 'User found',

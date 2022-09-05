@@ -19,7 +19,7 @@ const userSchema = new Schema({
         type: String,
     },
     favorite: {
-        type: String,
+        type: Boolean,
         default: false
     },
     userId: {

@@ -25,8 +25,15 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             throw new Error('the email already exists');
         }
         const encryptPassword = yield bcrypt_1.default.hash(password, 8);
-        const user = yield user_1.default.create(Object.assign(Object.assign({}, req.body), { password: encryptPassword }));
-        const token = yield (0, generateJWT_1.JWTgenerator)(user._id);
+        const newUser = yield user_1.default.create(Object.assign(Object.assign({}, req.body), { password: encryptPassword }));
+        const token = yield (0, generateJWT_1.JWTgenerator)(newUser._id);
+        const user = {
+            avatar: newUser.avatar,
+            name: newUser.name,
+            email: newUser.email,
+            note: newUser.note,
+            _id: newUser._id
+        };
         res.status(200).json({
             ok: true,
             message: 'User created',
@@ -56,17 +63,24 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             throw new Error('the password is incorrect');
         }
         const token = yield (0, generateJWT_1.JWTgenerator)(userDB._id);
+        const user = {
+            avatar: userDB.avatar,
+            name: userDB.name,
+            email: userDB.email,
+            note: userDB.note,
+            _id: userDB._id
+        };
         res.status(200).json({
             ok: true,
             message: 'User logged',
-            data: userDB,
+            data: user,
             token,
         });
     }
     catch (error) {
         res.status(404).json({
             ok: false,
-            message: 'User coult not be create',
+            message: 'User coult not be loggin',
             data: error.message
         });
     }
@@ -92,13 +106,9 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getUser = getUser;
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
         const { userId } = req;
-        const user = yield user_1.default.findById(id)
+        const user = yield user_1.default.findById(userId)
             .select('-password');
-        if (!user || user._id.toString() !== userId) {
-            throw new Error('the user does not exist');
-        }
         res.status(200).json({
             ok: true,
             message: 'User found',

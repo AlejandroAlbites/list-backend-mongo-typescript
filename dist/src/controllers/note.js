@@ -22,7 +22,6 @@ const createList = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (!user) {
             throw new Error('Invalid user');
         }
-        console.log(user);
         const note = yield note_1.default.create(Object.assign(Object.assign({}, req.body), { userId: user._id }));
         yield user.updateOne({ $push: { note: note } });
         res.status(200).json({
@@ -47,7 +46,7 @@ const showNotesByUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         if (!user) {
             throw new Error('Invalid user');
         }
-        const notes = yield note_1.default.find({ user: userId });
+        const notes = yield note_1.default.find({ userId: user._id });
         res.status(200).json({
             ok: true,
             message: 'Notes founded',
@@ -108,7 +107,6 @@ const destroyNote = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         if (note.userId.toString() !== user._id.toString()) {
             throw new Error("Note does not belong to this user");
         }
-        console.log(note._id);
         yield user_1.default.updateOne({ _id: user._id }, { $pull: { note: note._id } });
         yield note_1.default.findByIdAndDelete(note._id);
         res.status(200).json({

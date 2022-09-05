@@ -6,7 +6,8 @@ export interface UserEntry extends Document {
     name: string,
     email: string,
     password: string,
-    note: NotesEntry[]
+    avatar: string,
+    note: NotesEntry[],
     createdAt: Date | string,
     updatedAt: Date | string,
 }
@@ -23,6 +24,10 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: [true, "password is required"],
+    },
+    avatar: {
+        type: String,
+        required: [true, "avatar is required"],
     },
     note: [{ type: Schema.Types.ObjectId, ref: 'Note' }]
 },
